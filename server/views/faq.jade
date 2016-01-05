@@ -11,7 +11,7 @@ block body
       THAT'S RIGHT. THE BROWSER.
 
       It's written completely in JavaScript – the language of the web – and uses
-      **WebRTC** for true peer-to-peer transport. No browser plugins, extensions, or
+      **WebRTC** for true peer-to-peer transport. No browser plugin, extension, or
       installation is required.
 
       Using open web standards, WebTorrent connects website users together to form a
@@ -37,11 +37,11 @@ block body
 
       ## What are some use cases for WebTorrent?
 
-      One of the most exciting uses for WebTorrent is **peer-assisted delivery**. Non-
-      profit projects like [Wikipedia][wikipedia] and the [Internet Archive][archive]
-      could reduce bandwidth and hosting costs by letting visitors chip in. Popular
-      content is served browser-to-browser, quickly and cheaply. Rarely-accessed content is
-      served reliably over HTTP from the origin server.
+      One of the most exciting uses for WebTorrent is **peer-assisted delivery**.
+      Non-profit projects like [Wikipedia][wikipedia] and the [Internet
+      Archive][archive] could reduce bandwidth and hosting costs by letting visitors
+      chip in. Popular content is served browser-to-browser, quickly and cheaply.
+      Rarely-accessed content is served reliably over HTTP from the origin server.
 
       There are also exciting **business use cases**, from CDNs to app delivery.
 
@@ -67,8 +67,10 @@ block body
       - **[File.pizza][filepizza]** - Free peer-to-peer file transfers in your browser ([source code][filepizza-source])
       - **[PeerCloud][peercloud]** - Serverless websites via WebTorrent
       - **[Webtorrentapp][webtorrentapp]** – Platform for launching web apps from torrents
-      - **[Fastcast](fastcast)** – Gallery site with some videos ([source code](https://github.com/jakefb/fastcast))
-      - **[Colored Coins](coloredcoins)** - Open protocol for creating digital assets on the Bitcoin blockchain ([source code](https://github.com/Colored-Coins/Metadata-Handler))
+      - **[Fastcast][fastcast]** – Gallery site with some videos ([source code](https://github.com/jakefb/fastcast))
+      - **[Colored Coins][coloredcoins]** - Open protocol for creating digital assets on the Bitcoin blockchain ([source code](https://github.com/Colored-Coins/Metadata-Handler))
+      - **[Tokenly Pockets][pockets]** - Digital token issuance with WebTorrent-based metadata ([source code][pockets-source])
+      - **[βTorrent][btorrent]** - Fully-featured browser WebTorrent client ([source code][btorrent-source])
       - *Your app here – [Send a PR][pr] with your URL!*
 
       [instant.io-source]: https://github.com/feross/instant.io
@@ -80,6 +82,10 @@ block body
       [webtorrentapp]: https://github.com/alexeisavca/webtorrentapp
       [fastcast]: http://fastcast.nz
       [coloredcoins]: http://coloredcoins.org
+      [pockets]: https://tokenly.com/
+      [pockets-source]: https://github.com/loon3/Tokenly-Pockets
+      [btorrent]: https://btorrent.xyz
+      [btorrent-source]: https://github.com/DiegoRBaquero/bTorrent
 
       ## How does WebTorrent work?
 
@@ -120,7 +126,7 @@ block body
       ```js
       var client = new WebTorrent()
 
-      var torrentId = 'magnet:?xt=urn:btih:976674fc52bb8e61499e701033a5a4759b5f0d60'
+      var torrentId = 'magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d'
 
       client.add(torrentId, function (torrent) {
         var file = torrent.files[0]
@@ -153,13 +159,12 @@ block body
       WebTorrent is just one example.
 
       WebRTC [works everywhere][webrtc-everywhere], and browser support is excellent.
-      **Chrome**, **Firefox**, and **Opera** for Desktop and Android. Even **Microsoft**
-      is [adding WebRTC support][microsoft-support] to IE/Edge.
+      **Chrome**, **Firefox**, and **Opera** for Desktop and Android, as well as
+      **Microsoft Edge** have support.
 
       You can learn more about WebRTC data channels at [HTML5Rocks][datachannel-intro].
 
       [webrtc-everywhere]: https://speakerdeck.com/feross/webrtc-everywhere-beyond-the-browser-at-data-terra-nemo-2015
-      [microsoft-support]: http://blogs.msdn.com/b/ie/archive/2014/10/27/bringing-interoperable-real-time-communications-to-the-web.aspx
       [datachannel-intro]: http://www.html5rocks.com/en/tutorials/webrtc/datachannels/
 
       ## Can WebTorrent clients connect to normal BitTorrent clients?
@@ -169,9 +174,10 @@ block body
 
       Right now, we know of these WebRTC-capable torrent clients:
 
-      - [Instant.io][instant.io] - simple WebTorrent client in a website
-      - [`webtorrent-hybrid`][webtorrent-hybrid] - node.js package (command line and API)
-      - [Playback][playback] - Open source JavaScript video player **(coming soon!)**
+      - **[Playback][playback]** - Open source JavaScript video player **(super cool!)**
+      - **[`webtorrent-hybrid`][webtorrent-hybrid]** - Node.js package (command line and API)
+      - **[Instant.io][instant.io]** - Simple WebTorrent client in a website
+      - **[βTorrent][btorrent]** - Fully-featured browser WebTorrent client ([source code][btorrent-source])
       - *More coming soon – [Send a PR][pr] to add your client to the list!*
 
       In node.js, `webtorrent-hybrid` can download torrents from WebRTC peers or TCP peers
@@ -291,7 +297,7 @@ block body
 
       It does work! But you can't just use any random magnet uri or `.torrent` file. The
       torrent must be seeded by a WebRTC-capable client, i.e.
-      [webtorrent-hybrid][webtorrent-hybrid] or [instant.io](instant.io).
+      [webtorrent-hybrid][webtorrent-hybrid], [instant.io][instant.io], or [Playback][playback].
 
       In the browser, WebTorrent can only download torrents that are explicitly seeded to
       web peers via a WebRTC-capable client. Desktop torrent clients need to support
@@ -320,7 +326,7 @@ block body
       [Gitter][gitter] or on IRC at `#webtorrent` (freenode).
 
 
-      [append-to]: https://github.com/feross/webtorrent/blob/master/lib/append-to.js#L7-L15
+      [append-to]: https://github.com/feross/webtorrent/blob/master/lib/append-to.js#L6-L14
       [gitter]: https://gitter.im/feross/webtorrent
       [instant.io]: https://instant.io
       [issues]: https://github.com/feross/webtorrent/issues

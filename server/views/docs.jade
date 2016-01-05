@@ -19,12 +19,13 @@ block body
       ```js
       var client = new WebTorrent()
 
-      var torrentId = 'magnet:?xt=urn:btih:976674fc52bb8e61499e701033a5a4759b5f0d60'
+      var torrentId = 'magnet:?xt=urn:btih:6a9759bffd5c0af65319979fb7832189f4f3c35d'
 
       client.add(torrentId, function (torrent) {
+        // Torrents can contain many files. Let's use the first.
         var file = torrent.files[0]
 
-        // Display the file by adding it to the DOM. Supports video, audio, images, etc.
+        // Display the file by adding it to the DOM. Supports video, audio, image, etc. files
         file.appendTo('body')
       })
       ```
@@ -44,9 +45,8 @@ block body
         nodeId: String|Buffer, // DHT protocol node ID (default=randomly generated)
         peerId: String|Buffer, // Wire protocol peer ID (default=randomly generated)
         rtcConfig: Object,     // RTCPeerConnection configuration object (default=STUN only)
-        storage: Function,     // custom storage engine, or `false` to use in-memory engine
         tracker: Boolean,      // Whether or not to enable trackers (default=true)
-        wrtc: {}               // custom webrtc implementation (in node, specify the [wrtc](https://www.npmjs.com/package/wrtc) package)
+        wrtc: Object           // Custom webrtc implementation (in node, specify the [wrtc](https://www.npmjs.com/package/wrtc) package)
       }
       ```
 
@@ -67,9 +67,9 @@ block body
 
       ```json
       {
-        announce: [],    // List of additional trackers to use (added to list in .torrent or magnet uri)
-        path: String,    // Folder where files will be downloaded (default=`/tmp/webtorrent/`)
-        verify: Boolean  // Verify previously stored data before starting (default=false)
+        announce: [],   // Torrent trackers to use (added to list in .torrent or magnet uri)
+        path: String,   // Folder to download files to (default=`/tmp/webtorrent/`)
+        store: Function // Custom chunk store (must follow [abstract-chunk-store](https://www.npmjs.com/package/abstract-chunk-store) API)
       }
       ```
 
@@ -87,7 +87,7 @@ block body
 
       `input` can be any of the following:
 
-      - path to the file or folder on filesystem (string)
+      - path to the file or folder on filesystem (string) (Node.js only)
       - W3C [File](https://developer.mozilla.org/en-US/docs/Web/API/File) object (from an `<input>` or drag and drop)
       - W3C [FileList](https://developer.mozilla.org/en-US/docs/Web/API/FileList) object (basically an array of `File` objects)
       - Node [Buffer](http://nodejs.org/api/buffer.html) object (works in [the browser](https://www.npmjs.org/package/buffer))
@@ -147,6 +147,38 @@ block body
       ### `torrent.swarm`
 
       The attached [bittorrent-swarm](https://github.com/feross/bittorrent-swarm) instance.
+
+      #### `torrent.received`
+
+      Get total bytes received from peers (including invalid data).
+
+      #### `torrent.downloaded`
+
+      Get total bytes received from peers (excluding invalid data).
+
+      #### `torrent.timeRemaining`
+
+      Get the time remaining in millis if downloading.
+
+      #### `torrent.progress`
+
+      Get the total progress from 0 to 1.
+
+      #### `torrent.ratio`
+
+      Get the torrent ratio (seeded/downloaded).
+
+      #### `torrent.downloadSpeed()`
+
+      Returns the download speed.
+
+      #### `torrent.uploadSpeed()`
+
+      Returns the current upload speed.
+
+      #### `torrent.path`
+
+      Get the torrent download location.
 
       ### `torrent.destroy()`
 
@@ -309,6 +341,10 @@ block body
         console.log('New DOM node with the content', elem)
       })
       ```
+
+      #### `file.renderTo(elem, function callback (err, elem) {})`
+
+      Like `file.appendTo` but renders directly into given element (or CSS selector).
 
       ### `file.getBlobURL(function callback (err, url) {})`
 

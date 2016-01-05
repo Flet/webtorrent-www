@@ -1,6 +1,6 @@
 var compress = require('compression')
 var cors = require('cors')
-var debug = require('debug')('webtorrent-ww:web')
+var debug = require('debug')('webtorrent-www:web')
 var downgrade = require('downgrade')
 var express = require('express')
 var highlight = require('highlight.js')
@@ -51,9 +51,13 @@ app.use(function (req, res, next) {
     return res.redirect('https://webtorrent.io' + req.url)
   }
 
-  // Strict transport security (to prevent MITM attacks on the site)
+  // Use HTTP Strict Transport Security
+  // Lasts 1 year, incl. subdomains, allow browser preload list
   if (config.isProd) {
-    res.header('Strict-Transport-Security', 'max-age=31536000')
+    res.header(
+      'Strict-Transport-Security',
+      'max-age=31536000; includeSubDomains; preload'
+    )
   }
 
   // Add cross-domain header for fonts, required by spec, Firefox, and IE.
@@ -80,13 +84,13 @@ app.use(function (req, res, next) {
   next()
 })
 
-app.use(cors({
-  origin: function (origin, cb) {
-    var allowed = /https?:\/\/localhost(:|$)/.test(origin) ||
-      /https?:\/\/[^.\/]+\.localtunnel\.me$/.test(origin)
-    cb(null, allowed)
-  }
-}))
+/**
+ * Enable CORS preflight, and cache it for 1 hour. This is necessary to support
+ * requests from another domain with the "Range" HTTP header.
+ */
+app.options('/torrents/*', cors({ maxAge: 60 * 60 }))
+
+app.get('/torrents/*', cors(), express.static(__dirname + '/../static'))
 
 app.use(express.static(__dirname + '/../static'))
 
@@ -110,6 +114,10 @@ app.get('/create', function (req, res) {
   res.render('create', { title: 'Create a .torrent file' })
 })
 
+app.get('/logs', function (req, res) {
+  res.redirect(301, 'https://botbot.me/freenode/webtorrent/')
+})
+
 app.get('*', function (req, res) {
   res.status(404).render('error', {
     title: '404 Not Found',
@@ -126,9 +134,8 @@ app.use(function (err, req, res, next) {
   })
 })
 
-server.listen(config.ports.web, function (err) {
-  if (err) throw err
-  debug('listening on port ' + config.ports.web)
+server.listen(config.ports.web, function () {
+  debug('listening on port ' + server.address().port)
   downgrade()
   process.send('ready')
 })
